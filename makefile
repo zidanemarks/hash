@@ -57,10 +57,10 @@ $(TARGET_DEBUG): $(OBJ_DEBUG)
 
 # phony rules
 .PHONY: all
-all: $(TARGET)
+all: clean $(TARGET)
 
 .PHONY: debug
-debug: $(TARGET_DEBUG)
+debug: clean $(TARGET_DEBUG)
 
 .PHONY: clean
 clean:

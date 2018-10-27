@@ -19,14 +19,14 @@ int main()
 {
     uint64_t hash;
     hash = (uint64_t) HashWrapper("abcdefghijklmn");
-    printf("INFO : hash value is %x\n", hash);
+    printf("INFO : hash value is %016llx\n", hash);
     hash = (uint64_t) HashWrapper("fdafadasfsdfasdfasdfasdfasdfadfadfadadfsa");
-    printf("INFO : hash value is %x\n", hash);
+    printf("INFO : hash value is %016llx\n", hash);
     hash = (uint64_t) HashWrapper("fdfadassssssssfdfdf rercrqwcrcerqerqecceqrq");
-    printf("INFO : hash value is %x\n", hash);
+    printf("INFO : hash value is %016llx\n", hash);
     hash = (uint64_t) HashWrapper("fdgadgvateaaetvwettvtavva");
-    printf("INFO : hash value is %x\n", hash);
+    printf("INFO : hash value is %016llx\n", hash);
     hash = (uint64_t) HashWrapper("qeuirbvqwunrvo;weurqwv;ermueo;vnmq;runvonveo;rvno;qwvrnuqo;rnvrnuvqr");
-    printf("INFO : hash value is %x\n", hash);
+    printf("INFO : hash value is %016llx\n", hash);
     return 0;
 }
