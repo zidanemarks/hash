@@ -1,5 +1,6 @@
 
 #include <stdint.h>
+#include "configure.h"
 
 uint32_t RSHash(char *str);
 
@@ -17,8 +18,10 @@ uint32_t DJBHash(char *str);
 
 uint32_t APHash(char *str);
 
-uint32_t HashWrappar(char *str);
-
-uint32_t HashWrappar(char *str);
+#if defined (__i386__)
+  uint32_t HashWrapper(char *str);
+#elif defined(__x86_64__)
+  uint64_t HashWrapper(char *str);
+#endif
 
 uint32_t GetTimeStrapasSeed();

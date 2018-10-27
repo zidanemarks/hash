@@ -1,10 +1,12 @@
-#include "hashmap.h" 
-#include "murmurhash.h"
-#include "configure.h"
-#include <string>
+#include "include/hashmap.h" 
+#include "include/murmurhash.h"
+#include "include/configure.h"
+#include <string.h>
 #include <time.h>
+#include <stdint.h>
+#include <stdio.h>
 
-uint32_ SDBMHash(char *str)
+uint32_t SDBMHash(char *str)
 {
     unsigned int hash = 0;
 
@@ -184,7 +186,7 @@ uint64_t HashWrapper(char *str)
     uint32_t  result32;
 
     #if defined MURMURHASH
-    uint32_t len = strlen();
+    uint32_t len = strlen(str);
     uint32_t seed = GetTimeStrapasSeed();
      return MurmurHash64A(str, len, seed);
     #elif defined RSHASH  
@@ -212,7 +214,7 @@ uint64_t HashWrapper(char *str)
 #endif
 
 //  set the sum of all time(year, month, day, hours, miniuts, seconds) as the seed
-uint32_t GetTimeStrapasSeed();{
+uint32_t GetTimeStrapasSeed(){
     time_t t;
     struct tm *lt;
     time(&t);

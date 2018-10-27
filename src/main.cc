@@ -8,16 +8,18 @@
   is under the MIT license.
 */
 
-#include "murmurhash.h"
-#include "hashmap.h"
-#include "util.h"
+#include "include/murmurhash.h"
+#include "include/hashmap.h"
+#include "include/util.h"
+#include "stdio.h"
+#include "stdint.h"
 
-main()
+
+int main()
 {
-    char *str= "abcdefghijklmn";
+    char *str="abcdefghijklmn";
     uint64_t hash;
-    hash = (uint64_t) HashWrappar(str);
+    hash = (uint64_t) HashWrapper(str);
     printf("INFO : hash value is %20x", hash);
     return 0;
 }
-

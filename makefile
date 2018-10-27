@@ -12,7 +12,8 @@ SRC_PATH := src
 DBG_PATH := debug
 
 ifeq ($(OS),Windows_NT)
- RM:=del
+ #RM:=del
+ RM:=rm
 else
  RM:=rm -rf
 endif
