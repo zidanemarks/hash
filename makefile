@@ -1,15 +1,24 @@
-QUIT :=
-#tool macros
-CC:=g++
-CCFLAG:=-std=c++17
-DBGFLAG:= -g
-CCOBJFLAG:= $(CCFLAG) -c
+#op macros
+QUIT :=@
 
 # path macros
 BIN_PATH := bin
 OBJ_PATH := obj
 SRC_PATH := src
 DBG_PATH := debug
+ifeq ($(OS), Windows_NT)
+#INC_PATH := D:\project\hash
+INC_PATH := `pwd`
+else
+INC_PATH := ${PWD}
+endif
+
+#tool macros
+CC:=g++
+CCFLAG:=-std=c++17
+DBGFLAG:= -g
+CCOBJFLAG:= $(CCFLAG) -c
+INCFLAG := -I$(INC_PATH)
 
 ifeq ($(OS),Windows_NT)
  #RM:=del
@@ -47,13 +56,14 @@ $(TARGET): $(OBJ)
 	$(CC) $(CCFLAG) -o $@ $?
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c*
-	$(CC) $(CCOBJFLAG) -o $@ $<
+	echo $(INCFLAG)
+	$(CC) $(INCFLAG) $(CCOBJFLAG) -o $@ $<
 
 $(DBG_PATH)/%.o: $(SRC_PATH)/%.c*
 	$(CC) $(CCOBJFLAG) $(DBGFLAG) -o $@ $<
 
 $(TARGET_DEBUG): $(OBJ_DEBUG)
-	$(CC) $(CCFLAG) $(DBGFLAG) $? -o $@
+	$(CC) $(INCFLAG) $(CCFLAG) $(DBGFLAG) $? -o $@
 
 # phony rules
 .PHONY: all
@@ -74,3 +84,6 @@ clean:
 distclean:
 	$(QUITE)echo CLEAN $(CLEAN_LIST)
 	$(QUITE)$(RM)  $(DISTCLEAN_LIST)
+
+var:
+	echo $(INC_PATH)
