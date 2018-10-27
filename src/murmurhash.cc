@@ -11,6 +11,7 @@
 */
 #include "include/murmurhash.h"
 #include "include/util.h"
+#include <stdio.h>
 
 #if defined(__x86_64__)
 
@@ -32,6 +33,8 @@ uint64_t MurmurHash64A ( const void * key, int len, unsigned int seed )
 {
     const uint64_t m = 0xc6a4a7935bd1e995;
     const int r = 47;
+
+    printf("INFO : X86_64 format hash string");
 
     uint64_t h = seed ^ (len * m);
 
@@ -93,6 +96,8 @@ unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed )
 
     const unsigned int m = 0x5bd1e995;
     const int r = 24;
+
+    printf("INFO : __i386__ format hash string");
 
     // Initialize the hash to a 'random' value
 

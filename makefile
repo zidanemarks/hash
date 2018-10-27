@@ -13,7 +13,7 @@ DBG_PATH := debug
 
 ifeq ($(OS),Windows_NT)
  #RM:=del
- RM:=rm
+ RM:=rm -rf
 else
  RM:=rm -rf
 endif
@@ -65,10 +65,10 @@ debug: $(TARGET_DEBUG)
 .PHONY: clean
 clean:
 	$(QUIET)echo CLEAN $(CLEAN_LIST)
-	$(QUIET)$(RM) $(OBJ_PATH)\*.o
-	$(QUIET)$(RM) $(BIN_PATH)\*.exe
-	$(QUIET)$(RM) $(DBG_PATH)\*.o
-	$(QUIET)$(RM) $(DBG_PATH)\*.exe
+	$(QUIET)$(RM) $(OBJ_PATH)/*.o
+	$(QUIET)$(RM) $(BIN_PATH)/*.exe
+	$(QUIET)$(RM) $(DBG_PATH)/*.o
+	$(QUIET)$(RM) $(DBG_PATH)/*.exe
 
 .PHONY: distclean
 distclean:
