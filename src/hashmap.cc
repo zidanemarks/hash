@@ -1,4 +1,8 @@
 #include "hashmap.h" 
+#include "murmurhash.h"
+#include "configure.h"
+#include <string>
+#include <time.h>
 
 uint32_ SDBMHash(char *str)
 {
@@ -130,11 +134,58 @@ uint32_t APHash(char *str)
 }
 
 uint32_t HashWrapper32(char *str){
-   return (hash & 0x7FFFFFFF);
+
+    #if defined MURMURHASH
+     uint32_t len=strlen(str);
+     return MurmurHash2();
+    #elif defined RSHASH  
+      return RSHash(str);
+    #elif defined SDBMHASH  
+      return SDBMHash(str);
+    #elif defined JSHASH  
+      return JSHash(str);
+    #elif defined PJWHASH  
+      return PJWHash(str);
+    #elif defined ELFHASH  
+      return ELFHash(str);
+    #elif defined BKDRHASH  
+      return BKDRHash(str);
+    #elif defined DJBHASH  
+      return DJBHash(str);
+    #elif defined APHASH  
+      return APHash(str);
+    #endif
+
+
 }
 
 uint64_t HashWrapper64(char *str)
-{
+{ 
+    uint32_t  result32;
+
+    #if defined MURMURHASH
+    uint32_t len = strlen()
+    uint32_t
+     return MurmurHash64A
+    #elif defined RSHASH  
+      result32 = RSHash(*str);
+    #elif defined SDBMHASH  
+      result32 = SDBMHash(str);
+    #elif defined JSHASH  
+      result32 = JSHash(str);
+    #elif defined PJWHASH  
+      result32 = PJWHash();
+    #elif defined ELFHASH  
+      result32 = ELFHash();
+    #elif defined BKDRHASH  
+      result32 = BKDRHash();
+    #elif defined DJBHASH  
+      result32 = DJBHash();
+    #elif defined APHASH  
+      result32 = APHash();
+    #endif
+
+    return ((result32+1) << 32) & ((result32+2) << 32);
 
 }
 

@@ -8,4 +8,4 @@
   is under the MIT license.
 */
 #define __x86_64__
-#define HASH_VERSION "MURMURHASH"
+#define  MURMURHASH
