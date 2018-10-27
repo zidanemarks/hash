@@ -17,4 +17,8 @@ uint32_t DJBHash(char *str);
 
 uint32_t APHash(char *str);
 
-uint32_t HashWrppaer(char *str);
+uint32_t HashWrappar(char *str);
+
+uint32_t HashWrappar(char *str);
+
+uint32_t GetTimeStrapasSeed();

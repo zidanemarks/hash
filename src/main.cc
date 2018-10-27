@@ -12,9 +12,12 @@
 #include "hashmap.h"
 #include "util.h"
 
-main(int argc, char const *argv[])
+main()
 {
-    /* code */
+    char *str= "abcdefghijklmn";
+    uint64_t hash;
+    hash = (uint64_t) HashWrappar(str);
+    printf("INFO : hash value is %20x", hash);
     return 0;
 }
 

@@ -8,6 +8,8 @@ uint32_ SDBMHash(char *str)
 {
     unsigned int hash = 0;
 
+    printf("INFO : SDBHASH\n"); 
+
     while (*str)
     {
         // equivalent to: hash = 65599*hash + (*str++);
@@ -23,6 +25,8 @@ uint32_t RSHash(char *str)
     unsigned int a = 63689;
     unsigned int hash = 0;
 
+    printf("INFO : RSHASH\n"); 
+
     while (*str)
     {
         hash = hash * a + (*str++);
@@ -35,6 +39,8 @@ uint32_t RSHash(char *str)
 uint32_t JSHash(char *str)
 {
     unsigned int hash = 1315423911;
+
+    printf("INFO : JSHASH\n"); 
 
     while (*str)
     {
@@ -54,6 +60,8 @@ uint32_t PJWHash(char *str)
     unsigned int hash             = 0;
     unsigned int test             = 0;
 
+    printf("INFO : PJWHASH\n"); 
+
     while (*str)
     {
         hash = (hash << OneEighth) + (*str++);
@@ -71,6 +79,8 @@ uint32_t ELFHash(char *str)
 {
     unsigned int hash = 0;
     unsigned int x    = 0;
+
+    printf("INFO : ELFHASH\n"); 
 
     while (*str)
     {
@@ -91,6 +101,8 @@ uint32_t BKDRHash(char *str)
     unsigned int seed = 131; // 31 131 1313 13131 131313 etc..
     unsigned int hash = 0;
 
+    printf("INFO : BKDRHASH\n"); 
+
     while (*str)
     {
         hash = hash * seed + (*str++);
@@ -103,6 +115,8 @@ uint32_t BKDRHash(char *str)
 uint32_t DJBHash(char *str)
 {
     unsigned int hash = 5381;
+
+    printf("INFO : DJBRHASH\n"); 
 
     while (*str)
     {
@@ -117,6 +131,8 @@ uint32_t APHash(char *str)
 {
     unsigned int hash = 0;
     int i;
+
+    printf("INFO : APHASH\n"); 
 
     for (i=0; *str; i++)
     {
@@ -133,7 +149,9 @@ uint32_t APHash(char *str)
     return (hash & 0x7FFFFFFF);
 }
 
-uint32_t HashWrapper32(char *str){
+#if defined (__i386__) 
+
+uint32_t HashWrapper(char *str){
 
     #if defined MURMURHASH
      uint32_t len=strlen(str);
@@ -159,36 +177,46 @@ uint32_t HashWrapper32(char *str){
 
 }
 
-uint64_t HashWrapper64(char *str)
+#elif defined(__x86_64__)
+
+uint64_t HashWrapper(char *str)
 { 
     uint32_t  result32;
 
     #if defined MURMURHASH
-    uint32_t len = strlen()
-    uint32_t
-     return MurmurHash64A
+    uint32_t len = strlen();
+    uint32_t seed = GetTimeStrapasSeed();
+     return MurmurHash64A(str, len, seed);
     #elif defined RSHASH  
-      result32 = RSHash(*str);
+      result32 = RSHash(str);
     #elif defined SDBMHASH  
       result32 = SDBMHash(str);
     #elif defined JSHASH  
       result32 = JSHash(str);
     #elif defined PJWHASH  
-      result32 = PJWHash();
+      result32 = PJWHash(str);
     #elif defined ELFHASH  
-      result32 = ELFHash();
+      result32 = ELFHash(str);
     #elif defined BKDRHASH  
-      result32 = BKDRHash();
+      result32 = BKDRHash(str);
     #elif defined DJBHASH  
-      result32 = DJBHash();
+      result32 = DJBHash(str);
     #elif defined APHASH  
-      result32 = APHash();
+      result32 = APHash(str);
     #endif
 
     return ((result32+1) << 32) & ((result32+2) << 32);
 
 }
 
+#endif
 
-
+//  set the sum of all time(year, month, day, hours, miniuts, seconds) as the seed
+uint32_t GetTimeStrapasSeed();{
+    time_t t;
+    struct tm *lt;
+    time(&t);
+    lt = localtime(&t);
+    return lt->tm_year+lt->tm_mon+lt->tm_mday+lt->tm_hour+lt->tm_min+lt->tm_sec;
+}
 
