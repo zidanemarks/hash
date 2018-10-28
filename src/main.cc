@@ -15,6 +15,7 @@
 #include "stdint.h"
 
 
+#if(0)
 int main()
 {
     uint64_t hash;
@@ -30,3 +31,4 @@ int main()
     printf("INFO : hash value is %016llx\n", hash);
     return 0;
 }
+#endif

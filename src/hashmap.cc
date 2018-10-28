@@ -222,3 +222,38 @@ uint32_t GetTimeStrapasSeed(){
     return lt->tm_year+lt->tm_mon+lt->tm_mday+lt->tm_hour+lt->tm_min+lt->tm_sec;
 }
 
+
+uint64_t Hash64(uint32_t (*func)(),  char *str){
+    uint32_t hash;
+    hash = func(str);
+    return ((hash+2) << sizeof(uint32_t)) & ((hash+1) << sizeof(uint32_t))
+}
+
+uint64_t SDBMHash64(*str){
+    return (Hash64)(SDBMHash, str);
+}
+
+uint64_t JSHash64(char *str){
+    return (Hash64)(JSHash, str);
+}
+
+uint64_t PJWHash64(char *str){
+    return (Hash64)(PJWHash, str);
+}
+
+uint64_t ELFHash64(char *str){
+    return (Hash64)(ELFHash, str);
+}
+
+uint64_t BKDRHash64(char *str){
+    return (Hash64)(BKDRHash, str);
+}
+
+uint64_t DJBHash64(char *str){
+    return (Hash64)(DJBHash, str);
+}
+
+uint64_t APHash64(char *str){
+    return (Hash64)(APHash, str);
+}
+
