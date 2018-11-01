@@ -4,13 +4,14 @@ QUIT :=@
 # path macros
 BIN_PATH := bin
 OBJ_PATH := obj
-SRC_PATH := src
+HSH_PATH := src
+TST_PATH := test
 DBG_PATH := debug
 ifeq ($(OS), Windows_NT)
 #INC_PATH := D:\project\hash
 INC_PATH := `pwd`
 else
-INC_PATH := ${PWD}
+INC_PATH := ${PWD}+
 endif
 
 #tool macros
@@ -28,7 +29,7 @@ else
 endif
 
 # compile macros
-TARGET_NAME := main
+TARGET_NAME := test
 ifeq ($(OS),Windows_NT)
  TARGET_NAME:=$(addsuffix .exe,$(TARGET_NAME))
 endif
@@ -37,7 +38,10 @@ TARGET_DEBUG := $(DBG_PATH)/$(TARGET_NAME)
 MAIN_SRC := src/test.c
 
 #src files & obj files
-SRC := $(foreach x, $(SRC_PATH), $(wildcard $(addprefix $(x)/*,.c*)))
+HSH_SRC := $(foreach x, $(HSH_PATH), $(wildcard $(addprefix $(x)/*,.c*)))
+TST_SRC := $(foreach x, $(TST_PATH), $(wildcard $(addprefix $(x)/*,.c*)))
+SRC := $(filter-out $(wildcard  $(HSH_PATH)/main*), $(HSH_SRC) $(TST_SRC)) 
+#SRC := $(HSH_SRC) $(TST_SRC) 
 OBJ := $(addprefix $(OBJ_PATH)/, $(addsuffix .o, $(notdir $(basename $(SRC)))))
 OBJ_DEBUG := $(addprefix $(DBG_PATH)/, $(addsuffix .o, $(notdir $(basename $(SRC)))))
 
@@ -53,9 +57,13 @@ default: all
 
 # non-phony targets
 $(TARGET): $(OBJ)
+	echo hello
 	$(CC) $(CCFLAG) -o $@ $?
 
-$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c*
+obj/mumurhash.o:src/mumurhash.c
+	$(CC) $(INCFLAG) $(CCOBJFLAG) -o $@ $<
+
+$(OBJ_PATH)/%.o: $(HSH_PATH)/%.c* $(TST_PATH)/%.c*
 	echo $(INCFLAG)
 	$(CC) $(INCFLAG) $(CCOBJFLAG) -o $@ $<
 
@@ -67,7 +75,9 @@ $(TARGET_DEBUG): $(OBJ_DEBUG)
 
 # phony rules
 .PHONY: all
-all: clean $(TARGET)
+#all: clean $(TARGET)
+all: $(TARGET)
+
 
 .PHONY: debug
 debug: clean $(TARGET_DEBUG)
@@ -86,4 +96,6 @@ distclean:
 	$(QUITE)$(RM)  $(DISTCLEAN_LIST)
 
 var:
-	echo $(INC_PATH)
+	echo $(SRC)
+	echo $(OBJ)
+	echo $(OBJ_PATH)/%.o

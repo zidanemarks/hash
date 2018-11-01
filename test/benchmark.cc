@@ -2,7 +2,7 @@
 // 1. use given string patten 
 // 2. hash exectuting timing cost caculate  
 // 3. test hash hit ratio
-#include "benchmark.h"
+#include "test/benchmark.h"
 #include "hashmap.h"
 #include "murmurhash.h"
 #include <stdlib.h>
