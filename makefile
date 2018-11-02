@@ -57,14 +57,12 @@ default: all
 
 # non-phony targets
 $(TARGET): $(OBJ)
-	echo hello
 	$(CC) $(CCFLAG) -o $@ $?
 
-obj/mumurhash.o:src/mumurhash.c
+$(OBJ_PATH)/%.o: $(HSH_PATH)/%.c*
 	$(CC) $(INCFLAG) $(CCOBJFLAG) -o $@ $<
 
-$(OBJ_PATH)/%.o: $(HSH_PATH)/%.c* $(TST_PATH)/%.c*
-	echo $(INCFLAG)
+$(OBJ_PATH)/%.o: $(TST_PATH)/%.c*
 	$(CC) $(INCFLAG) $(CCOBJFLAG) -o $@ $<
 
 $(DBG_PATH)/%.o: $(SRC_PATH)/%.c*
@@ -76,7 +74,7 @@ $(TARGET_DEBUG): $(OBJ_DEBUG)
 # phony rules
 .PHONY: all
 #all: clean $(TARGET)
-all: $(TARGET)
+all: clean $(TARGET)
 
 
 .PHONY: debug

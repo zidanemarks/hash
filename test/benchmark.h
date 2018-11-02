@@ -33,8 +33,8 @@ for(auto obj : strarray){
 }
 #endif
 
-typedef myType = char (*a)[]; 
-typedef fileType = char (*b)[1000];
+typedef (char *)[] myType; 
+typedef (char *)[1000] filetype;
  // testcase pattern files name list 
 const myType list= {
        "MurMur",
