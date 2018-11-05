@@ -96,4 +96,4 @@ distclean:
 var:
 	echo $(SRC)
 	echo $(OBJ)
-	echo $(OBJ_PATH)/%.o
+	echo $(OBJ_PATH)/%.o 

@@ -8,7 +8,7 @@
 #include <assert.h>
 
 #if defined(__x86_64__)
-   typedef uint64_t (*HashHandler)(char *str);
+   typedef uint32_t (*HashHandler)(char *str);
    typedef uint64_t HashStr;
 #elif defined(__i386__) 
    typedef uint32_t (*HashHandler)(char *str);
@@ -21,7 +21,7 @@ typedef struct{
     double  *time;
     uint32_t *len;
     char *name;
-    HashStr *hashstr;
+    HashStr hashstr[1000];
 } HashParam;
 
 #if(0)
@@ -33,10 +33,9 @@ for(auto obj : strarray){
 }
 #endif
 
-typedef (char *)[] myType; 
-typedef (char *)[1000] filetype;
+typedef char * myType; 
  // testcase pattern files name list 
-const myType list= {
+const myType list[]= {
        "MurMur",
        "RS",
        "SDBM",
@@ -50,7 +49,7 @@ const myType list= {
 
 char FindHash(char *name);
 
-uint32_t FindPattern(fileType files);
+uint32_t FindPattern(char *files[1000]);
 
 void LoadString(char *name, char *str);
 
@@ -59,9 +58,7 @@ void BenchMark(HashParam *param);
 
 void LoadStringKeys();
 
-void Launch32Test(char *str);
+void LaunchTest(char *name);
 
-void Launch64Test(char *str);
-
-void LaunchAllTest(char *str);
+void LaunchAllTest(void);
 

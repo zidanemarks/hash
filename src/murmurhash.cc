@@ -13,7 +13,8 @@
 #include "include/util.h"
 #include <stdio.h>
 
-#if defined(__x86_64__)
+//#if defined(__x86_64__)
+#if(1)
 
 // -------------------------------------------------------------------
 //
@@ -74,7 +75,7 @@ uint64_t MurmurHash64A ( const void * key, int len, unsigned int seed )
     return h;
 }
 
-#elif defined(__i386__)
+//#elif defined(__i386__)
 
 // -------------------------------------------------------------------
 //
