@@ -65,8 +65,11 @@ $(OBJ_PATH)/%.o: $(HSH_PATH)/%.c*
 $(OBJ_PATH)/%.o: $(TST_PATH)/%.c*
 	$(CC) $(INCFLAG) $(CCOBJFLAG) -o $@ $<
 
-$(DBG_PATH)/%.o: $(SRC_PATH)/%.c*
-	$(CC) $(CCOBJFLAG) $(DBGFLAG) -o $@ $<
+$(DBG_PATH)/%.o: $(HSH_PATH)/%.c*
+	$(CC) $(INCFLAG) $(CCOBJFLAG) $(DBGFLAG) -o $@ $<
+
+$(DBG_PATH)/%.o: $(TST_PATH)/%.c*
+	$(CC) $(INCFLAG) $(CCOBJFLAG) $(DBGFLAG) -o $@ $<
 
 $(TARGET_DEBUG): $(OBJ_DEBUG)
 	$(CC) $(INCFLAG) $(CCFLAG) $(DBGFLAG) $? -o $@

@@ -9,6 +9,8 @@
 #include <sys/time.h>
 #include <conio.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <string.h>
 
 
 HashStr TestHash(HashParam *param){
@@ -152,13 +154,28 @@ char FindHash(char *name){
 }
 
 uint32_t FindPattern( char *files[1000]){
-     _finddata_t fileDir;
+    struct _finddata_t fileDir;
 
     long lfDir;
     uint32_t i=0;
 
-    char* dir = "../pattern/";
- 
+    char* _Dir;
+    _Dir = (char*)malloc(sizeof(char)*255);
+    char dir[255];
+    getcwd(dir, sizeof(dir));
+    strcpy(_Dir, dir);
+
+    #ifdef _WIN32
+    printf("windosws !\n" );
+    strcat(dir, "\\pattern\\*txt");
+    strcat(_Dir, "\\");
+    #endif
+
+    #ifdef linux
+    strcat(dir, "/pattern/*.txt");
+    strcat(_Dir, "/");
+    #endif
+
     if((lfDir = _findfirst(dir, &fileDir))==-1){
       printf("INFO : No pattern is found\n");
       assert(0);
@@ -168,7 +185,13 @@ uint32_t FindPattern( char *files[1000]){
       do{
         printf("%s\n",fileDir.name);
         //files[i]=&fileDir.name[0];
-        files[i]=fileDir.name;
+        char *_Files;
+        _Files = (char *)malloc(sizeof(char)*255);
+        strcpy(_Files, _Dir);
+        strcat(_Files, fileDir.name);
+        files[i]=_Files;
+        printf("%s\n",files[i]);
+        free(_Files);
         i++;
       }while( _findnext( lfDir, &fileDir ) == 0 );
     }

@@ -7,7 +7,7 @@
 
 int main(int argc, char **argv){
 
-    assert(argc > 2);
+    assert(argc <= 2);
 
     switch(argc){
 
@@ -15,7 +15,6 @@ int main(int argc, char **argv){
              LaunchAllTest();
          case 2:
              LaunchTest(argv[1]);
-
      }
 
     return 0;
