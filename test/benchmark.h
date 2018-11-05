@@ -36,7 +36,7 @@ for(auto obj : strarray){
 typedef char * myType; 
  // testcase pattern files name list 
 const myType list[]= {
-       "MurMur",
+       "MURMUR",
        "RS",
        "SDBM",
        "JS",

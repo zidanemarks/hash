@@ -189,13 +189,18 @@ uint32_t FindPattern( char *files[1000]){
         _Files = (char *)malloc(sizeof(char)*255);
         strcpy(_Files, _Dir);
         strcat(_Files, fileDir.name);
-        files[i]=_Files;
+        files[i] =(char*)malloc(sizeof(char)*255);
+        strcpy(files[i],_Files);
         printf("%s\n",files[i]);
         free(_Files);
         i++;
       }while( _findnext( lfDir, &fileDir ) == 0 );
     }
     _findclose(lfDir);
+
+  for(int j=0; j<i; j++){
+     printf("files is %s\n", files[j]);
+  }
  
   return i;
 
@@ -240,6 +245,7 @@ void LaunchTest(char *name){
     char opcode = FindHash(name);
     if(opcode==1){
          for(int i=0; i<num; i++){
+           printf("file name is %s", files[i]);
            LoadString(files[i], param->str); 
            TestMurMurHash(param);
            free(param->str);
