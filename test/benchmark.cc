@@ -13,14 +13,15 @@
 #include <string.h>
 
 
-HashStr TestHash(HashParam *param){
+HashStr TestHash(HashParam *param, uint32_t n){
 
     struct timeval start, end;
     uint32_t hash_tmp;
     HashStr hash;
     //caculate length of string
-    *(param->len) = strlen(param->str);
-    param->len++;
+    //*(param->len) = strlen(param->str);
+    //param->len++;
+    param->len[n]=strlen(param->str);
 
     //caculate the time of hash executing
     gettimeofday(&start, NULL);
@@ -33,20 +34,22 @@ HashStr TestHash(HashParam *param){
     gettimeofday(&end, NULL);
 
     //*(param->time) = end.tv_sec-star.tv_sec;
-    *param->time=(end.tv_sec-start.tv_sec)*1000.+ (end.tv_usec-start.tv_usec)/1000.; 
-    param->time++;
+    //*param->time=(end.tv_sec-start.tv_sec)*1000.+ (end.tv_usec-start.tv_usec)/1000.; 
+    //param->time++;
+    param->time[n]=(end.tv_sec-start.tv_sec)*1000.+ (end.tv_usec-start.tv_usec)/1000.; 
 
     return hash; 
 }
 
-HashStr TestMurMurHash(HashParam *param){
+HashStr TestMurMurHash(HashParam *param, uint32_t n){
     printf("INFO : MurMurHash Test");
 
     struct timeval start, end;
     HashStr hash;
     //caculate length of string
-    *(param->len) = strlen(param->str);
-    param->len++;
+    printf("string is %s\n", param->str);
+    printf("string is %d\n", strlen(param->str));
+    *(param->len+n) = strlen(param->str) ;
 
     uint32_t len = strlen(param->str);
     uint32_t seed = GetTimeStrapasSeed();
@@ -64,8 +67,7 @@ HashStr TestMurMurHash(HashParam *param){
     gettimeofday(&end, NULL);
 
     //*(param->time) = end.tv_sec-star.tv_sec;
-    *param->time = (end.tv_sec-start.tv_sec)*1000.+ (end.tv_usec-start.tv_usec)/1000.; 
-    param->time++;
+    *(param->time+n) = (end.tv_sec-start.tv_sec)*1000.+ (end.tv_usec-start.tv_usec)/1000.; 
 
     return hash; 
 }
@@ -73,27 +75,27 @@ HashStr TestMurMurHash(HashParam *param){
 void BenchMark(HashParam *param){
    // make stastics for different string length
 
-    uint32_t HIT;
+    uint32_t HIT=0;
 
-    uint32_t N128;
-    uint32_t N256;
-    uint32_t N512;
-    uint32_t N1024;
-    uint32_t N2048;
-    uint32_t N4096;
+    uint32_t N128=0;
+    uint32_t N256=0;
+    uint32_t N512=0;
+    uint32_t N1024=0;
+    uint32_t N2048=0;
+    uint32_t N4096=0;
 
-    uint64_t T128;
-    uint64_t T256;
-    uint64_t T512;
-    uint64_t T1024;
-    uint64_t T2048;
-    uint64_t T4096;
+    uint64_t T128=0;
+    uint64_t T256=0;
+    uint64_t T512=0;
+    uint64_t T1024=0;
+    uint64_t T2048=0;
+    uint64_t T4096=0;
 
     printf("INFO : **************************************************\n");
     printf("INFO : Result of  %s\n", param->name);
     printf("INFO : **************************************************\n");
 
-    for(int i=0; i<sizeof(param->len); i++){
+    for(int i=0; i<param->num; i++){
 
 
 
@@ -123,23 +125,33 @@ void BenchMark(HashParam *param){
        }
 
        HashStr str= param->hashstr[i];
-       uint32_t hittmp;
-       for(int j=0; j<sizeof(param->hashstr); j++){
+       uint32_t hittmp=0;
+       for(int j=0; j<param->num; j++){
            //if(strcmp(str, param->hashstr[j])==0)
            if(str != param->hashstr[j])
               hittmp++;
        }
-       if(hittmp>1);
-         HIT++;
+       HIT=hittmp-param->num;
     }
+
+    double R128 = (N128!=0) ? (double) (T128/N128) : 0.;
+    double R256 = (N256!=0) ? (double) (T256/N256) : 0.;
+    double R512 = (N512!=0) ? (double) (T512/N512) : 0.;
+    double R1024 = (N1024!=0) ? (double) (T1024/N1024) : 0.;
+    double R2048 = (N2048!=0) ? (double) (T2048/N2048) : 0.;
+    double R4096 = (N4096!=0) ? (double) (T4096/N4096) : 0.;
+
+
     
+
+
     printf("INFO : hash hit ratio : %d\n", HIT);
-    printf("INFO : bit128 average performance : %ld\n", (long)(T128/N128));
-    printf("INFO : bit128 average performance : %ld\n", (long)(T256/N256));
-    printf("INFO : bit128 average performance : %ld\n", (long)(T512/N512));
-    printf("INFO : bit128 average performance : %ld\n", (long)(T1024/N1024));
-    printf("INFO : bit128 average performance : %ld\n", (long)(T2048/N2048));
-    printf("INFO : bit128 average performance : %ld\n", (long)(T4096/N4096));
+    printf("INFO : bit128 average performance : %f\n", R128);
+    printf("INFO : bit256 average performance : %f\n", R256);
+    printf("INFO : bit512 average performance : %f\n", R512);
+    printf("INFO : bit1024 average performance : %f\n", R1024);
+    printf("INFO : bit2048 average performance : %f\n", R2048);
+    printf("INFO : bit4096 average performance : %f\n", R4096);
     printf("INFO : **************************************************\n");
     
 
@@ -168,12 +180,12 @@ uint32_t FindPattern( char *files[1000]){
     #ifdef _WIN32
     printf("windosws !\n" );
     strcat(dir, "\\pattern\\*txt");
-    strcat(_Dir, "\\");
+    strcat(_Dir, "\\pattern\\");
     #endif
 
     #ifdef linux
     strcat(dir, "/pattern/*.txt");
-    strcat(_Dir, "/");
+    strcat(_Dir, "/pattern/");
     #endif
 
     if((lfDir = _findfirst(dir, &fileDir))==-1){
@@ -206,7 +218,7 @@ uint32_t FindPattern( char *files[1000]){
 
 }
 
-void LoadString(char* name, char* str){
+void LoadString(char* name, HashParam *param){
   FILE *fp;
   uint32_t flen;  
 
@@ -218,15 +230,15 @@ void LoadString(char* name, char* str){
 
    fseek(fp, 0L, SEEK_END);
    flen=ftell(fp); 
-   str=(char *)malloc(flen+1);
-   if(str==NULL){
+   param->str=(char *)malloc(flen+1);
+   if(param->str==NULL){
        printf("INFO: file : %s is empty", name);
        getch();
    }
    else {
      fseek(fp, 0L, SEEK_SET);
-     fread(str, flen, 1, fp);
-     str[flen] = 0;
+     fread(param->str, flen, 1, fp);
+     param->str[flen] = 0;
    }
 
    fclose(fp);
@@ -237,17 +249,19 @@ void LaunchTest(char *name){
     HashParam *param;
 
     param = (HashParam*)malloc(sizeof(HashParam));
-    param->time =(double *)malloc(sizeof(double)*1000);
-    param->len =(uint32_t *)malloc(sizeof(uint32_t)*1000);
+    //param->time =(double *)malloc(sizeof(double)*1000);
+    //param->len =(uint32_t *)malloc(sizeof(uint32_t)*1000);
     //param->hashstr =(uint32_t *)malloc(sizeof(uint32_t)*1000);
 
-    uint32_t num =  FindPattern(files);
+    param->name = name;
+
+    param->num =  FindPattern(files);
     char opcode = FindHash(name);
     if(opcode==1){
-         for(int i=0; i<num; i++){
+         for(int i=0; i<param->num; i++){
            printf("file name is %s", files[i]);
-           LoadString(files[i], param->str); 
-           TestMurMurHash(param);
+           LoadString(files[i], param); 
+           param->hashstr[i] = TestMurMurHash(param, i);
            free(param->str);
          }
 
@@ -281,9 +295,9 @@ void LaunchTest(char *name){
               param->handler = APHash;
               param->name = "APHash";
        }
-       for(int i=0; i<num; i++){
-         LoadString(files[i], param->str); 
-         param->hashstr[i] = TestHash(param);
+       for(int i=0; i<param->num; i++){
+         LoadString(files[i], param); 
+         param->hashstr[i] = TestHash(param, i);
          free(param->str);
        }
        BenchMark(param);

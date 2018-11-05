@@ -18,10 +18,11 @@
 typedef struct{
     char *str; 
     HashHandler handler;
-    double  *time;
-    uint32_t *len;
+    double  time[1000];
+    uint32_t len[1000];
     char *name;
     HashStr hashstr[1000];
+    uint32_t num;
 } HashParam;
 
 #if(0)
@@ -51,7 +52,7 @@ char FindHash(char *name);
 
 uint32_t FindPattern(char *files[1000]);
 
-void LoadString(char *name, char *str);
+void LoadString(char *name, HashParam *param);
 
 
 void BenchMark(HashParam *param);

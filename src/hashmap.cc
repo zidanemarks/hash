@@ -6,8 +6,6 @@
 #include <stdint.h>
 #include <stdio.h>
 
-
-
 uint32_t SDBMHash(char *str)
 {
     unsigned int hash = 0;
@@ -159,7 +157,8 @@ uint32_t HashWrapper(char *str){
 
     #if defined MURMURHASH
      uint32_t len=strlen(str);
-     return MurmurHash2();
+     uint32_t seed = GetTimeStrapasSeed();
+     return MurmurHash2(str, len, seed);
     #elif defined RSHASH  
       return RSHash(str);
     #elif defined SDBMHASH  
