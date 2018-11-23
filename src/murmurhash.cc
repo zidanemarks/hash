@@ -9,9 +9,7 @@
   All code is released to the public domain. For business purposes, Murmurhash
   is under the MIT license.
 */
-#include "include/murmurhash.h"
-#include "include/util.h"
-#include <stdio.h>
+#include "murmurhash.h"
 
 //#if defined(__x86_64__)
 #if(1)

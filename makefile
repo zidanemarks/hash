@@ -11,7 +11,7 @@ ifeq ($(OS), Windows_NT)
 #INC_PATH := D:\project\hash
 INC_PATH := `pwd`
 else
-INC_PATH := ${PWD}+
+INC_PATH := ${PWD}/include
 endif
 
 #tool macros
@@ -90,6 +90,7 @@ clean:
 	$(QUIET)$(RM) $(BIN_PATH)/*.exe
 	$(QUIET)$(RM) $(DBG_PATH)/*.o
 	$(QUIET)$(RM) $(DBG_PATH)/*.exe
+	$(QUIET)$(RM) $(BIN_PATH)/$(TARGET_NAME)
 
 .PHONY: distclean
 distclean:

@@ -1,10 +1,4 @@
-#include "include/hashmap.h" 
-#include "include/murmurhash.h"
-#include "include/configure.h"
-#include <string.h>
-#include <time.h>
-#include <stdint.h>
-#include <stdio.h>
+#include "hashmap.h" 
 
 uint32_t SDBMHash(char *str)
 {

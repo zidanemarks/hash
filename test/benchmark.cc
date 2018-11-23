@@ -2,15 +2,7 @@
 // 1. use given string patten 
 // 2. hash exectuting timing cost caculate  
 // 3. test hash hit ratio
-#include "test/benchmark.h"
-#include "include/hashmap.h"
-#include "include/murmurhash.h"
-#include <stdlib.h>
-#include <sys/time.h>
-#include <conio.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
+#include "benchmark.h"
 
 
 HashStr TestHash(HashParam *param, uint32_t n){
@@ -166,7 +158,6 @@ char FindHash(char *name){
 }
 
 uint32_t FindPattern( char *files[1000]){
-    struct _finddata_t fileDir;
 
     long lfDir;
     uint32_t i=0;
@@ -177,16 +168,12 @@ uint32_t FindPattern( char *files[1000]){
     getcwd(dir, sizeof(dir));
     strcpy(_Dir, dir);
 
-    #ifdef _WIN32
+  #ifdef _WIN32
+
+    struct _finddata_t fileDir;
     printf("windosws !\n" );
     strcat(dir, "\\pattern\\*txt");
     strcat(_Dir, "\\pattern\\");
-    #endif
-
-    #ifdef linux
-    strcat(dir, "/pattern/*.txt");
-    strcat(_Dir, "/pattern/");
-    #endif
 
     if((lfDir = _findfirst(dir, &fileDir))==-1){
       printf("INFO : No pattern is found\n");
@@ -210,6 +197,44 @@ uint32_t FindPattern( char *files[1000]){
     }
     _findclose(lfDir);
 
+  #elif linux
+    strcat(dir, "/pattern/*.txt");
+    strcat(_Dir, "/pattern/");
+    DIR *d;
+    struct dirent *file;
+    struct stat sb;
+    if(!(d = opendir(path)))
+    {
+
+      printf("INFO : No pattern is found\n");
+      printf("error opendir %s!!!/n",path);
+      assert(0);
+    }
+    else {
+      do{
+          //remove ./ ../
+          if(strncmp(file->d_name, ".", 1) == 0)
+              continue;
+          //remove non std format pattern
+          if(strstr(file->d_name, ".txt") == NULL) 
+              continue;
+          // cpy string to file directory list
+          char *_Files;
+          _Files = (char *)malloc(sizeof(char)*255);
+          strcpy(_Files, _Dir);
+          strcat(_Files, file->d_name);
+          files[i] =(char*)malloc(sizeof(char)*255);
+          strcpy(files[i],_Files);
+          printf("%s\n",files[i]);
+          free(_Files);
+          i++;
+      }while((file = readdir(d)) != NULL)
+    } 
+
+    closedir(d);
+
+  #endif
+
   for(int j=0; j<i; j++){
      printf("files is %s\n", files[j]);
   }
@@ -223,8 +248,10 @@ void LoadString(char* name, HashParam *param){
   uint32_t flen;  
 
   if( (fp=fopen(name, "r")) == NULL ){
+      char c;
        printf("Cannot open file : %s, press any key to exit!\n", name);
-       getch();
+       //getch();
+       c=getchar();
        exit(1);
    }
 
@@ -232,8 +259,10 @@ void LoadString(char* name, HashParam *param){
    flen=ftell(fp); 
    param->str=(char *)malloc(flen+1);
    if(param->str==NULL){
+       char c;
        printf("INFO: file : %s is empty", name);
-       getch();
+       //getch();
+       c=getchar();
    }
    else {
      fseek(fp, 0L, SEEK_SET);

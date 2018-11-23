@@ -11,7 +11,10 @@
 */
 //#pragma once
 #include <stdint.h>
+#include <stdio.h>
 #include "configure.h"
+#include "util.h"
+
 #if 0
 #include "slice.h"
 #endif

@@ -2,6 +2,11 @@
 #include <stdint.h>
 #include <time.h>
 #include "configure.h"
+#include "murmurhash.h"
+#include "configure.h"
+#include <string.h>
+#include <stdio.h>
+#include "util.h"
 
 uint32_t RSHash(char *str);
 

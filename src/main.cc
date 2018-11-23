@@ -8,11 +8,7 @@
   is under the MIT license.
 */
 
-#include "include/murmurhash.h"
-#include "include/hashmap.h"
-#include "include/util.h"
-#include "stdio.h"
-#include "stdint.h"
+#include "hashmap.h"
 
 
 #if(0)

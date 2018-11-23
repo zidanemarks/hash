@@ -3,9 +3,19 @@
 #include <string.h>
 #include <stdio.h>
 #include <io.h>
-#include "include/configure.h"
-#include <string.h>
+#include <stdlib.h>
+#include <sys/time.h>
+//#include <conio.h>
+#include <unistd.h>
 #include <assert.h>
+#include "hashmap.h"
+#include "murmurhash.h"
+#include "configure.h"
+#ifdef _WIN32 
+  #include <dirent.h>
+  #include <sys/types.h>
+#endif
+
 
 #if defined(__x86_64__)
    typedef uint32_t (*HashHandler)(char *str);
