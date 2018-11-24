@@ -7,5 +7,6 @@
   All code is released to the public domain. For business purposes, Murmurhash
   is under the MIT license.
 */
+#pragma once
 #define __x86_64__
 #define  MURMURHASH
