@@ -23,12 +23,13 @@ BOOST ?= 1
 BOOST_TARGET_NAME := keyvaluehash.so
 BOOST_TARGET :=$(BIN_PATH)/$(BOOST_TARGET_NAME)
 BOOST_TARGET_DBG :=$(DBG_PATH)/$(BOOST_TARGET_NAME)
+BOOSTCCFLAG := $(CCFLAG) -fPIC -shared
 
 #tool macros
 CC:=g++
 CCFLAG:=-std=c++17
 DBGFLAG:= -g
-CCOBJFLAG:= $(CCFLAG) -c
+CCOBJFLAG:= $(CCFLAG) -c -fPIC
 INCFLAG := -I$(INC_PATH)
 
 ifeq ($(BOOST), 1) 
@@ -99,11 +100,10 @@ $(TARGET_DEBUG): $(OBJ_DEBUG)
 	$(CC) $(INCFLAG) $(CCFLAG) $(DBGFLAG) $? -o $@
 
 $(BOOST_TARGET): $(OBJ_BOOST) $(OBJ)
-	echo "hello2"
-	$(CC)  -o $@ $? $(CCFLAG) $(BOOSTLDFLAG)
+	$(CC) $(BOOSTCCFLAG) -o $@ $?  $(BOOSTLDFLAG)
 
 $(BOOST_TARGET_DBG):$(OBJ_BOOST_DBG) $(OBJ_DEBUG)
-	$(CC) $(CCFLAG) $(BOOSTLDFLAG) $(DBGFLAG) -o $@ $?
+	$(CC) $(BOOSTCCFLAG) $(BOOSTLDFLAG) $(DBGFLAG) -o $@ $?
 
 # phony rules
 .PHONY: all
@@ -121,6 +121,7 @@ clean:
 	$(QUIET)$(RM) $(BIN_PATH)/*.exe
 	$(QUIET)$(RM) $(DBG_PATH)/*.o
 	$(QUIET)$(RM) $(DBG_PATH)/*.exe
+	$(QUIET)$(RM) $(BIN_PATH)/*.so
 	$(QUIET)$(RM) $(BIN_PATH)/$(TARGET_NAME)
 
 .PHONY: distclean
@@ -136,7 +137,7 @@ var:
 	$(QUITE)echo $(OBJ_BOOST)
 
 # make for test and all platform test
-.PHONY: boost boost_debug
+.PHONY: boost boost_debug boost_test
 
 boost: $(BOOST_TARGET)
 
